@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Shooting Game</h1>
+    <h5>Round Remains = <span id="rounds">5</span></h5>
+    <div>
+      <h2>player1</h2>
+      <p>health <span>100</span></p>
+      <p>fire = <span id="p1FireScore"></span></p>
+      <p>win = <span id="player1Score">0</span></p>
+    </div>
+    <div>
+      <h2>player2</h2>
+      <p>health <span>100</span></p>
+      <p>fire = <span id="p2FireScore"></span></p>
+      <p>win = <span id="player2Score">0</span></p>
+    </div>
+    <p id="comment"></p>
+    <button id="start-btn" onclick="shootBtn()">Start game</button>
+    <script>
+      //Declaring Initial Player's Health
+      var player1Health = 100;
+      var player2Health = 100;
+
+      let roundCounter = 5;
+
+      //let player1Score=0;
+      let player1Score = 0;
+      let player2Score = 0;
+
+      //Executing onclick Function for Shooting
+      function shootBtn() {
+        //Getting Random Power for each player
+        var player1Fire = Math.floor(Math.random() * 5);
+        var player2Fire = Math.floor(Math.random() * 5);
+
+        console.log("Player 1 Fire : " + player1Fire);
+
+        console.log("Player 2 Fire : " + player2Fire);
+
+        document.getElementById("p1FireScore").innerHTML = player1Fire;
+        document.getElementById("p2FireScore").innerHTML = player2Fire;
+        // localStorage.setItem("player1Score", "p1FireScore");
+
+        //Calculating Players Health after hitting by power
+        player1Health = player1Health - player2Fire;
+        player2Health = player2Health - player1Fire;
+
+        //Counting Number of Rounds Left
+        roundCounter--;
+        document.getElementById("rounds").innerHTML = roundCounter;
+
+        // The Player whose health reaches 0, dies and the game ends.
+        if (player1Health == 0) {
+          document.getElementById("comment").innerHTML = "Player 2 Won!";
+        }
+        if (player2Health == 0) {
+          document.getElementById("comment").innerHTML = "Player 1 Won!";
+        }
+
+        //Restricting Shoot Button after 5 Rounds are Completed
+        if (roundCounter == 0) {
+          document.getElementById("start-btn").disabled = true;
+          document.getElementById("start-btn").innerHTML = "Game Over";
+          document.getElementById("start-btn").style.backgroundColor = "grey";
+        }
+
+        //Finding the Winner of individual rounds and incrementing their score by 1
+        if (player1Fire > player2Fire) {
+          player1Score = player1Score + 1;
+        }
+
+        if (player2Fire > player1Fire) {
+          player2Score = player2Score + 1;
+        }
+
+        document.getElementById("player1Score").innerHTML = player1Score;
+        document.getElementById("player2Score").innerHTML = player2Score;
+
+        //Checking if anyone of the player has scored 3, if yes then terminating the game and announcing the result.
+        if (player1Score == 3) {
+          gameOver("Player 1 Won!");
+        }
+
+        if (player2Score == 3) {
+          gameOver("Player 2 Won!");
+        }
+
+        //Checking which player has scored more after completing 5 rounds
+        if (roundCounter == 5) {
+          if (player1Score > player2Score) {
+            gameOver("Player 1 Won!");
+          }
+
+          if (player2Score > player1Score) {
+            gameOver("Player 2 Won!");
+          }
+
+          //Checking if both the players have scored equaly, if yes then printing DRAW
+          if (player2Score == player1Score) {
+            gameOver("Match Draw");
+          }
+        }
+
+        console.log("");
+      }
+
+      function gameOver(playercomment) {
+        document.getElementById("comment").innerHTML = playercomment;
+        document.getElementById("start-btn").disabled = true;
+        document.getElementById("start-btn").innerHTML = "Game Over";
+        document.getElementById("start-btn").style.backgroundColor = "grey";
+      }
+
+      //Reset Button Function / Reload of location page
+    </script>
+  </body>
+</html>
